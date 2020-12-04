@@ -8,17 +8,17 @@ void setup(){
 
   void loop(){
     pinMode(ledPin, OUTPUT);
-    pinMode(PushButton, INPUT_PULLUP); 
+    pinMode(PushButton, INPUT); 
     
     int potread = analogRead(analogPin);
     float voltage = potread * (5.0/1023.0);
     
- if (digitalRead(PushButton) == LOW)
+ if (digitalRead(PushButton) == HIGH)
     {
     digitalWrite(ledPin, HIGH); 
     Serial.println(voltage);
     }
- if (digitalRead(PushButton) == HIGH)
+ if (digitalRead(PushButton) == LOW)
     {
      digitalWrite(ledPin, LOW);
     }

@@ -1,26 +1,44 @@
-int analogPin = A0;
-int PushButton = 8;
-int ledPin = 10;
+
+const int PushButton = 8;
+const int ledPin = 10;
+
+int LedState = LOW;
+int ButtonState;
+int LastButtonState = LOW;
+
+unsigned long lastDebounceTime = 0;
+unsigned long debounceDelay = 50;
 
 void setup(){
-  Serial.begin(9600);
+  
+    pinMode(ledPin, OUTPUT);
+    pinMode(PushButton, INPUT); 
+    digitalWrite(ledPin, LedState);
   }
 
   void loop(){
-    pinMode(ledPin, OUTPUT);
-    pinMode(PushButton, INPUT_PULLUP); 
+
+    int reading = digitalRead(PushButton);
+
+    if (reading != LastButtonState) {
+    // reset the debouncing timer
+    lastDebounceTime = millis();
     
-    int potread = analogRead(analogPin);
-    float voltage = potread * (5.0/1023.0);
+  }
+
+    if ((millis() - lastDebounceTime) > debounceDelay) {
+      
+      if (reading != ButtonState) {
+      ButtonState = reading;
+      
+      
+       if (ButtonState == HIGH) {
+        LedState = !LedState;
+        
+          }
+       }
+    }
     
- if (digitalRead(PushButton) == LOW)
-    {
-    digitalWrite(ledPin, HIGH); 
-    Serial.println(voltage);
-    }
- if (digitalRead(PushButton) == HIGH)
-    {
-     digitalWrite(ledPin, LOW);
-    }
- 
- }
+    digitalWrite(ledPin, LedState);
+    LastButtonState = reading;
+  }
