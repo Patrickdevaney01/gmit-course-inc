@@ -3,57 +3,54 @@
 #define PIN_LED1 12
 
 //PID constants
-double kp = 1;
-double ki = 2;
-double kd = 0;
+double kp = 2;
+double ki = 5;
+double kd = 1;
 
-double elapsedTime;
-double error;
-double lastError;
-double setPoint;
-double cumError, rateError;
+
 double output;
 
 // CLASS VARIABLES DECLARATION
-
 //Passes data to the class constructor
+
 Blinker blink1 = Blinker(PIN_LED1, 100, 100);
 ReadSensor sensor1 = ReadSensor(PIN_Anologue, 100);
 RelayControl Relay1(PIN_Relay,300);
+PID_Control PID1;
 
 void setup(){
       //sets the serial monitor to 9600 baud rate
         Serial.begin(9600);
-        setPoint = 2; //set point at zero degrees
         
+        //pinMode(PIN_Relay, OUTPUT);
 }   
  
 void loop(){
-      
+     
         unsigned long CurrentTime = millis();
-        bool ONorOFF;      
+        bool ONorOFF;
 
-       //If the voltage drops below 2 we turn relay on or else relay stays off
+       //Condition to set the Relay on or Off
         if(sensor1.getVoltage()< output){
         ONorOFF = 1;
         }
         else
         ONorOFF = 0;
 
-        //calls the functions contained in there classes
-        sensor1.ReadSensorInput(CurrentTime);
-        Relay1.setRelay(CurrentTime,ONorOFF);
+       //calls the Class functions
+        sensor1.ReadSensorInput();
         blink1.check(CurrentTime);
-
-         //takes input from Sensor and sends it to the PID 
-        double input = sensor1.getVoltage(); //read from Light Sensor connected to A0    
-        output = computePID(input,CurrentTime);
- 
+        Relay1.setRelay(CurrentTime,ONorOFF);
+        
+        double input = sensor1.getVoltage(); //read from Light Sensor connected to A0
+        PID1.computePID(input,CurrentTime);//recieves a output from the PID Controller
+        output = PID1.getPID_Outout();
+        
  Serial.print("X ,"); Serial.print(output); Serial.print(" ");
    Serial.println(" ");
 
 }
- //PID control Function
+ /*
 double computePID(double inp,unsigned long currentTime){     
            unsigned long previousTime;  
            double out;    
@@ -69,4 +66,4 @@ double computePID(double inp,unsigned long currentTime){
         previousTime = currentTime;                        //remember current time
  
         return out;                                        //have function return the PID output
-}
+}*/

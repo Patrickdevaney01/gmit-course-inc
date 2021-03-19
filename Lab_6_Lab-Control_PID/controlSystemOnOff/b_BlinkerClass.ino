@@ -1,5 +1,3 @@
-/*//#define PIN_LED1 12
-
 
 /*
  * BLINKER CLASS DEFINITION
@@ -26,7 +24,6 @@ class Blinker {
     // Checks whether it is time to turn on or off the LED.
     void check(unsigned long currentTime) {
       
-
       if(currentTime >= nextChangeTime) {
 
         if(ledState) {
