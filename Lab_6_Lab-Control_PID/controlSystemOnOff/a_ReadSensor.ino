@@ -23,8 +23,9 @@ class ReadSensor{
 
 //Function for reading an anologue input
 
-   void ReadSensorInput(){  
-    unsigned long currentTime = millis();
+   void ReadSensorInput(unsigned long currentTime){  
+    
+    
 //data output smoothing
     if(currentTime >= nextChangeTime) {
       
@@ -39,6 +40,7 @@ class ReadSensor{
    float getsensorValue(){
       return sensorValue;
     }
+ // Function to return the Voltage to the main tab so it can be printed
     int getVoltage(){
       return voltage;
     }
