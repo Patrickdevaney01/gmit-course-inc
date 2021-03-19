@@ -12,6 +12,7 @@ double error;
 double lastError;
 double setPoint;
 double cumError, rateError;
+double output;
 
 // CLASS VARIABLES DECLARATION
 
@@ -23,7 +24,7 @@ RelayControl Relay1(PIN_Relay,300);
 void setup(){
       //sets the serial monitor to 9600 baud rate
         Serial.begin(9600);
-        setPoint = 0; //set point at zero degrees
+        setPoint = 2; //set point at zero degrees
         
 }   
  
@@ -33,7 +34,7 @@ void loop(){
         bool ONorOFF;      
 
        //If the voltage drops below 2 we turn relay on or else relay stays off
-        if(sensor1.getVoltage()< 2){
+        if(sensor1.getVoltage()< output){
         ONorOFF = 1;
         }
         else
@@ -46,7 +47,7 @@ void loop(){
 
          //takes input from Sensor and sends it to the PID 
         double input = sensor1.getVoltage(); //read from Light Sensor connected to A0    
-        double output = computePID(input,CurrentTime);
+        output = computePID(input,CurrentTime);
  
  Serial.print("X ,"); Serial.print(output); Serial.print(" ");
    Serial.println(" ");
